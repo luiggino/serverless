@@ -27,7 +27,23 @@ provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
+  region: us-east-1
   versionFunctions: false
+
+  environment:
+    tableName: notes
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 # you can overwrite defaults here
 #  stage: dev
@@ -64,13 +80,13 @@ provider:
 
 functions:
   hello:
+    handler: handler.main
     events:
       - http:
-          method: get
-          path: test-handler
-    handler: handler.hello
-  toBeInvoked:
-    handler: handler.toBeInvoked
+          path: notes
+          method: post
+          cors: true
+          authorizer: aws_iam
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -123,7 +139,40 @@ functions:
 #       Description: "Description for the output"
 #       Value: "Some output value"
 
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: notes
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+custom:
+  dynamodb:
+  # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+    # Uncomment only if you already have a DynamoDB running locally
+    # noStart: true
+
 plugins:
   - serverless-offline
   - serverless-bundle
   - serverless-dotenv-plugin
+  - serverless-dynamodb-local
