@@ -23,8 +23,12 @@ npm i uuid --save
 ```
 
 # Start
-```serverless offline start```
+```
+serverless offline start
+```
 
-# Consume
-```curl --location --request GET 'http://localhost:3000/dev/test-handler' \
---header 'Content-Type: application/json'```
+# Test
+```
+curl --location --request GET 'http://localhost:3000/dev/test-handler' \
+--header 'Content-Type: application/json
+```

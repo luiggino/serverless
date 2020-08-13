@@ -29,10 +29,14 @@ npm i uuid --save
 ```
 
 # Start
-```serverless offline start```
+
+```
+serverless offline start
+```
 
 # Test
-```curl --location --request POST 'http://localhost:3000/dev/notes' \
+```
+curl --location --request POST 'http://localhost:3000/dev/notes' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "body": "{\"content\":\"hello world\",\"attachment\":\"hello.jpg\"}",

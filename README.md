@@ -1,26 +1,5 @@
- # Install
- ```npm install serverless -g```
+# Test serverless with amazon local
 
- # create serverless project
-```
-serverless create --template aws-nodejs --path myService
-cd myService/
-```
 
-# Install plugins
-
-```
-serverless plugin install -n serverless-offline
-serverless plugin install -n serverless-bundle
-serverless plugin install -n serverless-dotenv-plugin
-```
-
-# Install deps
-
-```
-npm i aws-sdk --save-dev
-npm i uuid --save
-```
-
-# Start
-```serverless offline start```
+- [test1](./test1/README.md) - response json
+- [test2](./test2/README.md) - dynamodb local
